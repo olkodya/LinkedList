@@ -3,7 +3,9 @@ package com.list;
 
 import org.jetbrains.annotations.Nullable;
 
-public class Node {
+import java.io.Serializable;
+
+public class Node implements Serializable {
     @Nullable
     private Node next;
 

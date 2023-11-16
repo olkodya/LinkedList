@@ -3,10 +3,9 @@ package com.list;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-public class MyList {
+public class MyList implements Serializable {
 
     public void add(Object ob) {
         Node cur = head;
@@ -79,12 +78,34 @@ public class MyList {
         return size;
     }
 
+
+    void swap(Node a, Node aPrev, Node b, Node bPrev) {
+        if (a.getNext() == b) {
+            a.setNext(b.getNext());
+            b.setNext(a);
+            if (aPrev != null)
+                aPrev.setNext(b);
+            else head = b;
+        } else {
+            Node tmp = a.getNext();
+            a.setNext(b.getNext());
+            b.setNext(tmp);
+            if (aPrev != null) {
+                Node tmp1 = aPrev.getNext();
+                aPrev.setNext(bPrev.getNext());
+                if (bPrev != null) {
+                    bPrev.setNext(tmp1);
+                }
+            } else head = b;
+
+        }
+
+    }
+
+
     int partition(int start, int end) {
-        System.out.println("End: " + end);
         Node pivot = get(end);
-        Node prev;
-        Node pPrev;
-        Node pivotPrev;
+        Node prev, pPrev, pivotPrev;
         if (end - 1 < 0)
             pivotPrev = null;
         else
@@ -100,72 +121,35 @@ public class MyList {
             prev = null;
         else
             prev = get(start - 1);
-        System.out.println(pivot.getData());
         if (pivot.getData() instanceof Integer) {
-            System.out.println("pivot = " + pivot.getData());
             while (cur != pivot) {
-                System.out.println("cur = " + cur.getData());
-                System.out.println("p = " + p.getData());
                 if ((Integer) cur.getData() <= (Integer) pivot.getData()) {
-                    Node tmp;
-                    if (p.getNext() != cur) {
-                        tmp = p.getNext();
-                        p.setNext(cur.getNext());
-                        cur.setNext(tmp);
-                        if (pPrev != null)
-                            pPrev.setNext(cur);
-                        else head = cur;
-                        if (prev != null)
-                            prev.setNext(p);
-                    } else {
-                        p.setNext(cur.getNext());
-                        cur.setNext(p);
-                        if (pPrev != null)
-                            pPrev.setNext(cur);
-                        else head = cur;
-                    }
-                    Node tmp2 = cur;
-                    cur = p;
-                    p = tmp2;
-                    pPrev = p;
-                    p = p.getNext();
+                    swap(p, pPrev, cur, prev);
+                    if (cur == pivotPrev)
+                        pivotPrev = p;
+                    Node tmp = p;
+                    pPrev = cur;
+                    p = cur.getNext();
                     pIndex++;
+                    cur = tmp.getNext();
+                    prev = tmp;
+                } else {
+                    prev = cur;
+                    cur = cur.getNext();
                 }
-                prev = cur;
-                cur = cur.getNext();
-                printList();
             }
-            pPrev = get(pIndex - 1);
-            p = pPrev.getNext();
-            Node tmp;
-            if (p.getNext() != pivot) {
-                tmp = p.getNext();
-                p.setNext(pivot.getNext());
-                pivot.setNext(tmp);
-                if (pPrev != null)
-                    pPrev.setNext(pivot);
-                if (pivotPrev != null)
-                    pivotPrev.setNext(p);
-            } else {
-                p.setNext(pivot.getNext());
-                pivot.setNext(p);
-                pPrev.setNext(pivot);
-            }
+            swap(p, pPrev, pivot, pivotPrev);
         }
-        printList();
         return pIndex;
     }
+
 
     public void quickSort(int start, int end) {
         if (start >= end)
             return;
         int pivot = partition(start, end);
-        System.out.println("pivot = " + pivot);
         quickSort(start, pivot - 1);
-        printList();
         quickSort(pivot + 1, end);
-        printList();
-
     }
 
 
@@ -178,18 +162,34 @@ public class MyList {
         System.out.println();
     }
 
-    public void serializeToXML() throws IOException {
-        XmlMapper xmlMapper = new XmlMapper();
-        File file = new File("my_list.xml");
+    public void forEach(CallBack callBackInt) {
         Node cur = head;
         while (cur != null) {
-            xmlMapper.writeValue(new File("my_list.xml"), cur);
+            callBackInt.toDo(cur.getData());
             cur = cur.getNext();
-            // assertNotNull(file);
         }
     }
 
+
+    public static void serializeToBinary(MyList list) throws IOException {
+        File file = new File("temp.out");
+        FileOutputStream fos = new FileOutputStream("temp.out");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(list);
+        oos.flush();
+        oos.close();
+    }
+
+    public static MyList deserializeFromBinary() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("temp.out");
+        ObjectInputStream oin = new ObjectInputStream(fis);
+        return (MyList) oin.readObject();
+    }
+
+
     @Nullable
     private Node head = null;
+
+
     private int size = 0;
 }
