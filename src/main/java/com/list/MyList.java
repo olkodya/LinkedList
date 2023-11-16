@@ -90,13 +90,6 @@ public class MyList implements Serializable {
             Node tmp = a.getNext();
             a.setNext(b.getNext());
             b.setNext(tmp);
-//            if (aPrev != null) {
-//                Node tmp1 = aPrev.getNext();
-//                aPrev.setNext(bPrev.getNext());
-//                if (bPrev != null) {
-//                    bPrev.setNext(tmp1);
-//                }
-//            } else head = b;
             if(aPrev!=null)
                 aPrev.setNext(b);
             else
