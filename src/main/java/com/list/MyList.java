@@ -1,9 +1,9 @@
 package com.list;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.util.Comparator;
 
 public class MyList implements Serializable {
 
@@ -90,20 +90,26 @@ public class MyList implements Serializable {
             Node tmp = a.getNext();
             a.setNext(b.getNext());
             b.setNext(tmp);
-            if (aPrev != null) {
-                Node tmp1 = aPrev.getNext();
-                aPrev.setNext(bPrev.getNext());
-                if (bPrev != null) {
-                    bPrev.setNext(tmp1);
-                }
-            } else head = b;
+//            if (aPrev != null) {
+//                Node tmp1 = aPrev.getNext();
+//                aPrev.setNext(bPrev.getNext());
+//                if (bPrev != null) {
+//                    bPrev.setNext(tmp1);
+//                }
+//            } else head = b;
+            if(aPrev!=null)
+                aPrev.setNext(b);
+            else
+                head = b;
+            if(bPrev!=null)
+                bPrev.setNext(a);
 
         }
 
     }
 
 
-    int partition(int start, int end) {
+    int partition(int start, int end, Comparator comparator) {
         Node pivot = get(end);
         Node prev, pPrev, pivotPrev;
         if (end - 1 < 0)
@@ -121,35 +127,36 @@ public class MyList implements Serializable {
             prev = null;
         else
             prev = get(start - 1);
-        if (pivot.getData() instanceof Integer) {
-            while (cur != pivot) {
-                if ((Integer) cur.getData() <= (Integer) pivot.getData()) {
-                    swap(p, pPrev, cur, prev);
-                    if (cur == pivotPrev)
-                        pivotPrev = p;
-                    Node tmp = p;
-                    pPrev = cur;
-                    p = cur.getNext();
-                    pIndex++;
-                    cur = tmp.getNext();
-                    prev = tmp;
-                } else {
-                    prev = cur;
-                    cur = cur.getNext();
-                }
+        // if (pivot.getData() instanceof Integer) {
+        while (cur != pivot) {
+            if (comparator.compare(cur.getData(), pivot.getData()) <= 0) {
+//                if ((Integer) cur.getData() <= (Integer) pivot.getData()) {
+                swap(p, pPrev, cur, prev);
+                if (cur == pivotPrev)
+                    pivotPrev = p;
+                Node tmp = p;
+                pPrev = cur;
+                p = cur.getNext();
+                pIndex++;
+                cur = tmp.getNext();
+                prev = tmp;
+            } else {
+                prev = cur;
+                cur = cur.getNext();
             }
-            swap(p, pPrev, pivot, pivotPrev);
         }
+        swap(p, pPrev, pivot, pivotPrev);
+        // }
         return pIndex;
     }
 
 
-    public void quickSort(int start, int end) {
+    public void quickSort(int start, int end, Comparator comparator) {
         if (start >= end)
             return;
-        int pivot = partition(start, end);
-        quickSort(start, pivot - 1);
-        quickSort(pivot + 1, end);
+        int pivot = partition(start, end, comparator);
+        quickSort(start, pivot - 1, comparator);
+        quickSort(pivot + 1, end, comparator);
     }
 
 
