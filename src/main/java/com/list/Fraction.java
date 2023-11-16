@@ -24,7 +24,7 @@ public class Fraction implements UserType {
     }
 
     public static boolean isFractionValid(int numerator, int denominator) {
-        if (numerator > denominator)
+        if (numerator >= denominator)
             return false;
         return denominator != 0;
     }

@@ -162,6 +162,10 @@ public class MyList implements Serializable {
 
     public void printList() {
         Node cur = head;
+        if (size == 0){
+            System.out.println("List is empty");
+            return;
+        }
         while (cur != null) {
             System.out.print(cur.getData() + " ");
             cur = cur.getNext();

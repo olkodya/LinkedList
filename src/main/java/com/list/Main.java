@@ -59,59 +59,76 @@ public class Main {
                     }
                     break;
                 case 2:
-                    System.out.println("Enter index from 0 to " + (list.getSize() - 1));
-                    index = scanner.nextInt();
-                    if (scanner.hasNextLine()) scanner.nextLine();
-                    if (dataType == 1) {
-                        System.out.println("Enter integer value");
-                        String value = scanner.nextLine();
-                        myInteger = (MyInteger) myInteger.parseValue(value);
-                        try {
-                            list.add(myInteger, index);
-                        } catch (IllegalArgumentException ex) {
-                            System.out.println(ex);
-                        }
+                    if(list.getSize() == 0)
+                        System.out.println("List is empty, add something first");
+                    else {
+                        System.out.println("Enter index from 0 to " + (list.getSize() - 1));
+                        index = scanner.nextInt();
+                        if (scanner.hasNextLine()) scanner.nextLine();
+                        if (dataType == 1) {
+                            System.out.println("Enter integer value");
+                            String value = scanner.nextLine();
+                            myInteger = (MyInteger) myInteger.parseValue(value);
+                            try {
+                                list.add(myInteger, index);
+                            } catch (IllegalArgumentException ex) {
+                                System.out.println(ex.getMessage());
+                            }
 
-                    } else {
-                        System.out.println("Enter fraction");
-                        String value = scanner.nextLine();
-                        fraction = (Fraction) fraction.parseValue(value);
-                        try {
-                            list.add(fraction, index);
-                        } catch (IllegalArgumentException ex) {
-                            System.out.println(ex);
+                        } else {
+                            System.out.println("Enter fraction");
+                            String value = scanner.nextLine();
+                            fraction = (Fraction) fraction.parseValue(value);
+                            try {
+                                list.add(fraction, index);
+                            } catch (IllegalArgumentException ex) {
+                                System.out.println(ex.getMessage());
+                            }
                         }
                     }
                     break;
                 case 3:
-
-                    System.out.println("Enter index from 0 to " + (list.getSize() - 1));
-                    index = scanner.nextInt();
-                    if (scanner.hasNextLine()) scanner.nextLine();
-                    try {
-                        System.out.println(list.get(index).getData());
-                    } catch (IllegalArgumentException ex) {
-                        System.out.println(ex.getMessage());
+                    if(list.getSize() == 0)
+                        System.out.println("List is empty, there is no element to get");
+                    else {
+                        System.out.println("Enter index from 0 to " + (list.getSize() - 1));
+                        index = scanner.nextInt();
+                        if (scanner.hasNextLine()) scanner.nextLine();
+                        try {
+                            System.out.println(list.get(index).getData());
+                        } catch (IllegalArgumentException ex) {
+                            System.out.println(ex.getMessage());
+                        }
                     }
                     break;
                 case 4:
-                    System.out.println("Enter index from 0 to " + (list.getSize() - 1));
-                    index = scanner.nextInt();
-                    if (scanner.hasNextLine()) scanner.nextLine();
-                    try {
-                        System.out.println("Removed element:" + list.remove(index));
-                    } catch (IllegalArgumentException ex) {
-                        System.out.println(ex.getMessage());
+                    if(list.getSize() == 0)
+                        System.out.println("List is empty, there is no element to remove");
+                    else {
+                        System.out.println("Enter index from 0 to " + (list.getSize() - 1));
+                        index = scanner.nextInt();
+                        if (scanner.hasNextLine()) scanner.nextLine();
+                        try {
+                            System.out.println("Removed element:" + list.remove(index));
+                        } catch (IllegalArgumentException ex) {
+                            System.out.println(ex.getMessage());
+                        }
                     }
                     break;
                 case 5:
                     System.out.println("Size of list:" + list.getSize());
                     break;
                 case 6:
-                    if (dataType == 1) {
-                        list.quickSort(0, list.getSize() - 1, myInteger.getTypeComparator());
-                    } else {
-                        list.quickSort(0, list.getSize() - 1, fraction.getTypeComparator());
+                    if(list.getSize() == 0)
+                        System.out.println("List is empty, add something first");
+                    else {
+                        list.printList();
+                        if (dataType == 1) {
+                            list.quickSort(0, list.getSize() - 1, myInteger.getTypeComparator());
+                        } else {
+                            list.quickSort(0, list.getSize() - 1, fraction.getTypeComparator());
+                        }
+                        list.printList();
                     }
                     break;
                 case 7:
@@ -119,7 +136,11 @@ public class Main {
                     break;
                 case 8:
                     try {
-                        MyList.serializeToBinary(list);
+                        if(list.getSize() == 0)
+                            System.out.println("List is empty, add something first");
+                        else {
+                            MyList.serializeToBinary(list);
+                        }
                     } catch (IOException ex) {
                         System.out.println(ex.getMessage());
                     }
