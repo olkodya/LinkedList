@@ -35,7 +35,7 @@ public class Fraction implements UserType {
     }
 
 
-    public static Object create() {
+    public static UserType create() {
         Random r = new Random();
         int randIntPart = r.nextInt(100) + 1;
         int randNum = r.nextInt(100) + 1;
@@ -49,7 +49,7 @@ public class Fraction implements UserType {
     }
 
     //@Override
-    public static Object clone(Object obj) {
+    public static UserType clone(UserType obj) {
         Fraction fraction = new Fraction();
         fraction.setDenominator(((Fraction) obj).getDenominator());
         fraction.setNumerator(((Fraction) obj).getNumerator());
@@ -59,7 +59,7 @@ public class Fraction implements UserType {
 
 
     @Override
-    public Object parseValue(String ss) {
+    public UserType parseValue(String ss) {
         String[] parts = ss.split(" ");
         String[] frParts = parts[1].split("/");
         Fraction fraction = new Fraction(Integer.parseInt(parts[0]), Integer.parseInt(frParts[0]), Integer.parseInt(frParts[1]));

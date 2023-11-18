@@ -17,14 +17,14 @@ public class MyInteger implements UserType{
 
     }
 
-    public static Object create() {
+    public static UserType create() {
         Random r = new Random();
         int randValue = r.nextInt(100) + 1;
         MyInteger myInteger = new MyInteger(randValue);
         return myInteger;
     }
 
-    public static Object clone(Object obj) {
+    public static UserType clone(UserType obj) {
         MyInteger myInteger = new MyInteger();
         myInteger.value = ((MyInteger)obj).value;
         return myInteger;
@@ -32,7 +32,7 @@ public class MyInteger implements UserType{
 
 
     @Override
-    public Object parseValue(String ss) {
+    public UserType parseValue(String ss) {
         return new MyInteger(Integer.parseInt(ss));
     }
 

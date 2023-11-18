@@ -62,7 +62,7 @@ public class Main {
                     if(list.getSize() == 0)
                         System.out.println("List is empty, add something first");
                     else {
-                        System.out.println("Enter index from 0 to " + (list.getSize() - 1));
+                        System.out.println("Enter index from 0 to " + (list.getSize()));
                         index = scanner.nextInt();
                         if (scanner.hasNextLine()) scanner.nextLine();
                         if (dataType == 1) {

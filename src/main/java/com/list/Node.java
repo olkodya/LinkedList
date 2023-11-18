@@ -9,7 +9,7 @@ public class Node implements Serializable {
     @Nullable
     private Node next;
 
-    public Node(@Nullable Node next, Object data) {
+    public Node(@Nullable Node next, UserType data) {
         this.next = next;
         this.data = data;
     }
@@ -26,9 +26,9 @@ public class Node implements Serializable {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(UserType data) {
         this.data = data;
     }
 
-    private Object data;
+    private UserType data;
 }

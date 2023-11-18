@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 public class MyList implements Serializable {
 
-    public void add(Object ob) {
+    public void add(UserType ob) {
         Node cur = head;
         if (head == null) {
             head = new Node(null, ob);
@@ -33,9 +33,14 @@ public class MyList implements Serializable {
         return cur;
     }
 
-    public void add(Object ob, int index) {
-        if (index < 0 || index >= size) {
+    public void add(UserType ob, int index) {
+        if (index < 0 || index > size) {
             throw new IllegalArgumentException("Invalid index " + index);
+        }
+
+        if(index == size){
+            add(ob);
+            return;
         }
         Node cur = head;
         Node prev = head;
@@ -120,10 +125,8 @@ public class MyList implements Serializable {
             prev = null;
         else
             prev = get(start - 1);
-        // if (pivot.getData() instanceof Integer) {
         while (cur != pivot) {
             if (comparator.compare(cur.getData(), pivot.getData()) <= 0) {
-//                if ((Integer) cur.getData() <= (Integer) pivot.getData()) {
                 swap(p, pPrev, cur, prev);
                 if (cur == pivotPrev)
                     pivotPrev = p;
@@ -176,7 +179,6 @@ public class MyList implements Serializable {
 
 
     public static void serializeToBinary(MyList list) throws IOException {
-        File file = new File("temp.out");
         FileOutputStream fos = new FileOutputStream("temp.out");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(list);
